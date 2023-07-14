@@ -2,6 +2,15 @@
   "name": "svelte-reactive",
   "version": "0.0.4",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olehmisar/svelte-reactive"
+  },
+  "keywords": [
+    "svelte",
+    "store",
+    "reactive"
+  ],
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && npm run package",
@@ -49,6 +58,7 @@
     "vite": "^4.4.2",
     "vitest": "^0.32.2"
   },
+  "main": "./dist/index.js",
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module"
