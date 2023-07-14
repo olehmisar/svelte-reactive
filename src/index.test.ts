@@ -62,4 +62,21 @@ describe("reactive", () => {
     stores[2].set(200);
     expect(values).toEqual([111, 112, 122, 222]);
   });
+
+  it("correctly unsubscribes", () => {
+    const a = writable(1);
+    const b = writable(2);
+    const sum = reactive(($) => $(a) + $(b));
+    const values: number[] = [];
+    const unsubscribe = sum.subscribe((value) => values.push(value));
+    expect(values).toEqual([3]);
+    a.set(2);
+    expect(values).toEqual([3, 4]);
+    unsubscribe();
+    a.set(3);
+    b.set(4);
+    expect(values).toEqual([3, 4]);
+    // if subscribed again, value is changed
+    expect(get(sum)).toBe(7);
+  });
 });
