@@ -33,18 +33,21 @@ describe("reactive", () => {
   it("works with if", async () => {
     const a = writable(1);
     const b = writable(2);
-    const show = writable(true);
+    // initially set to false to test if it picks up dependencies dynamically
+    const show = writable(false);
     const sum = reactive(($) => ($(show) ? $(a) + $(b) : 0));
     const values = readStoreToArray(sum);
-    expect(values).toEqual([3]);
+    expect(values).toEqual([0]);
+    show.set(true);
+    expect(values).toEqual([0, 3]);
     a.set(2);
-    expect(values).toEqual([3, 4]);
+    expect(values).toEqual([0, 3, 4]);
     show.set(false);
-    expect(values).toEqual([3, 4, 0]);
+    expect(values).toEqual([0, 3, 4, 0]);
     a.set(3);
     b.set(4);
     show.set(true);
-    expect(values).toEqual([3, 4, 0, 7]);
+    expect(values).toEqual([0, 3, 4, 0, 7]);
   });
 
   it("works with for loop", async () => {

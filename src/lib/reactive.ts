@@ -11,7 +11,7 @@ export function reactive<T>(fn: ($: Getter) => T): Readable<T> {
           store,
           store.subscribe((value) => {
             values.set(store, value);
-            if (started) {
+            if (started && subscriptions.has(store)) {
               sync();
             }
           }),
