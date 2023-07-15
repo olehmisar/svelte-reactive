@@ -82,4 +82,20 @@ describe("reactive", () => {
     // if subscribed again, value is changed
     expect(get(sum)).toBe(7);
   });
+
+  describe("examples", () => {
+    it("works with if", () => {
+      const a = writable(1);
+      const b = writable(0);
+      const fraction = reactive(($) => {
+        if ($(b) === 0) {
+          return 0;
+        }
+        return $(a) / $(b);
+      });
+      console.log(get(fraction)); // 0
+      b.set(2);
+      console.log(get(fraction)); // 0.5
+    });
+  });
 });
