@@ -3,13 +3,16 @@
 An alternative to svelte's `derived` store with API similar to $ in svelte components.
 
 ```js
-// svelte's derived
-const sum = derived([a, b], ([$a, $b]) => $a + $b);
+// svelte-reactive
+const sum = reactive(($) => $(numberA) + $(numberB));
 
 // VS
 
-// svelte-reactive
-const sum = reactive(($) => $(a) + $(b));
+// svelte's derived
+const sum = derived(
+  [numberA, numberB],
+  ([$numberA, $numberB]) => $numberA + $numberB,
+);
 ```
 
 ## Installation
@@ -35,13 +38,13 @@ console.log(get(sum)); // 7
 Works with `if` blocks too:
 
 ```js
-const a = writable(1);
-const b = writable(0);
+const numerator = writable(1);
+const denominator = writable(0);
 const fraction = reactive(($) => {
-  if ($(b) === 0) {
+  if ($(denominator) === 0) {
     return 0;
   }
-  return $(a) / $(b);
+  return $(numerator) / $(denominator);
 });
 console.log(get(fraction)); // 0
 b.set(2);
