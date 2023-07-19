@@ -83,6 +83,21 @@ describe("reactive", () => {
     expect(get(sum)).toBe(7);
   });
 
+  it("works with nested reactive stores", () => {
+    const a = writable(1);
+    const b = reactive(($) => $(a) * 2);
+    const c = reactive(($) => $(b) + 3);
+
+    const values = readStoreToArray(c);
+    expect(values).toEqual([5]);
+
+    a.set(2);
+    expect(values).toEqual([5, 7]);
+
+    a.set(3);
+    expect(values).toEqual([5, 7, 9]);
+  });
+
   describe("examples", () => {
     it("works with if", () => {
       const a = writable(1);
