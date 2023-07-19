@@ -1,6 +1,6 @@
 import { reactive } from "$lib/reactive";
 import { get, writable } from "svelte/store";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { readStoreToArray, sleep } from "./helpers";
 
 describe("reactive", () => {
@@ -98,6 +98,22 @@ describe("reactive", () => {
     expect(values).toEqual([5, 7, 9]);
   });
 
+  it("warns if $ is not used", () => {
+    const consoleSpy = vi.spyOn(console, "error");
+    const a = writable(1);
+    const flag = false;
+    const z = reactive(($) => {
+      if (!flag) {
+        return;
+      }
+      return $(a);
+    });
+    get(z);
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "reactive: $ is not used. This is likely a mistake.",
+    );
+  });
+
   describe("examples", () => {
     it("works with if", () => {
       const a = writable(1);
@@ -111,6 +127,24 @@ describe("reactive", () => {
       console.log(get(fraction)); // 0
       b.set(2);
       console.log(get(fraction)); // 0.5
+    });
+
+    it("not reactive with not stores", () => {
+      const numerator = writable(1);
+      let denominator = 0; // not a store
+      const fraction = reactive(($) => {
+        if (denominator === 0) {
+          return 0;
+        }
+        return $(numerator) / denominator;
+      });
+      // this will print 0 once and never again
+      fraction.subscribe((value) => console.log(value));
+      // this will not re-compute `fraction`
+      denominator = 2;
+      // even updating `numerator` will not re-compute `fraction`
+      // because `$(numerator)` was never called inside `fraction`
+      numerator.set(5);
     });
   });
 });

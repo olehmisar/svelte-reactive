@@ -50,3 +50,25 @@ console.log(get(fraction)); // 0
 b.set(2);
 console.log(get(fraction)); // 0.5
 ```
+
+## Caveats
+
+1. Always use stores inside `reactive` because `reactive` [does not work with regular variables](https://github.com/olehmisar/svelte-reactive/issues/2) (even if they are defined in a svelte component). I.e., this will not work:
+
+   ```js
+   const numerator = writable(1);
+   let denominator = 0; // not a store
+   const fraction = reactive(($) => {
+     if (denominator === 0) {
+       return 0;
+     }
+     return $(numerator) / denominator;
+   });
+   // this will print 0 once and never again
+   fraction.subscribe((value) => console.log(value));
+   // this will not re-compute `fraction`
+   denominator = 2;
+   // even updating `numerator` will not re-compute `fraction`
+   // because `$(numerator)` was never called inside `fraction`
+   numerator.set(5);
+   ```
