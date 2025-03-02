@@ -1,5 +1,5 @@
 <script>
-  import { denominator, fraction, numerator } from "./fraction";
+  import { denominator, fraction, numerator } from "./fraction.js";
 </script>
 
 <button

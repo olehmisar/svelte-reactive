@@ -1,7 +1,7 @@
-import { reactive } from "$lib/reactive";
+import { reactive } from "$lib/reactive.js";
 import { get, writable } from "svelte/store";
 import { describe, expect, it, vi } from "vitest";
-import { readStoreToArray, sleep } from "./helpers";
+import { readStoreToArray, sleep } from "./helpers.js";
 
 describe("reactive", () => {
   it("adds 1 + 2 to equal 3", () => {

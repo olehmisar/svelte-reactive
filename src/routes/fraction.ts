@@ -1,4 +1,4 @@
-import { reactive } from "$lib/index";
+import { reactive } from "$lib/index.js";
 import { writable } from "svelte/store";
 
 export const numerator = writable(1);
